@@ -20,7 +20,7 @@ fun <T> solution(
         val name = "y$year/d${day.toString().padStart(2, '0')}/part${i + 1}"
         for ((case, answer) in testCases) {
             val result = solution(case)
-            assert(result == answer) { "FAILURE - $name: expected `$answer`, got `$result`" }
+            check(result == answer) { "FAILURE - $name: expected `$answer`, got `$result`" }
         }
         val input = readInput(name)
         val result = solution(input)
