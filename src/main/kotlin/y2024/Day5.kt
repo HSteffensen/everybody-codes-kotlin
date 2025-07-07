@@ -12,14 +12,19 @@ fun main() {
             """2 3 4 5
 3 4 5 2
 4 5 2 3
-5 2 3 4""" to 2323,
+5 2 3 4""" to 2323L,
             """2 3 4 5
-6 7 8 9""" to 6254,
+6 7 8 9""" to 6254L,
         ),
         PuzzlePart(
             Day5::clapDanceUntilRepeat,
             """2 3 4 5
 6 7 8 9""" to 50877075L,
+        ),
+        PuzzlePart(
+            Day5::clapDanceHighestNumber,
+            """2 3 4 5
+6 7 8 9""" to 6584L,
         ),
     )
 }
@@ -35,7 +40,7 @@ object Day5 {
             .toMutableList()
     }
 
-    fun clapDance(input: String): Int {
+    fun clapDance(input: String): Long {
         val lines = readLines(input)
         for (step in 0..<10) {
             clapDanceStep(lines, step)
@@ -43,7 +48,7 @@ object Day5 {
         return shoutNumber(lines)
     }
 
-    private fun shoutNumber(lines: List<List<Int>>): Int = lines.map { it.first() }.joinToString("").toInt()
+    private fun shoutNumber(lines: List<List<Int>>): Long = lines.map { it.first() }.joinToString("").toLong()
 
     fun clapDanceStep(
         lines: MutableList<MutableList<Int>>,
@@ -66,7 +71,7 @@ object Day5 {
     fun clapDanceUntilRepeat(input: String): Long {
         val lines = readLines(input)
         var step = 0
-        val shoutCounts = mutableMapOf<Int, Int>()
+        val shoutCounts = mutableMapOf<Long, Int>()
         while (true) {
             clapDanceStep(lines, step)
             val shout = shoutNumber(lines)
@@ -78,5 +83,22 @@ object Day5 {
         }
 
         return shoutNumber(lines).toLong() * (step + 1).toLong()
+    }
+
+    fun clapDanceHighestNumber(input: String): Long {
+        val lines = readLines(input)
+        var step = 0
+        val shoutCounts = mutableMapOf<Long, Int>()
+        while (true) {
+            clapDanceStep(lines, step)
+            val shout = shoutNumber(lines)
+            shoutCounts.merge(shout, 1, Int::plus)
+            if (shoutCounts[shout] == 2024) {
+                break
+            }
+            step++
+        }
+
+        return shoutCounts.keys.max()
     }
 }
